@@ -1,0 +1,24 @@
+{
+  "name": "complete-javascript-course",
+  "version": "1.0.0",
+  "description": "learn js from udemy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stayacid/complete-javascript-course.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stayacid/complete-javascript-course/issues"
+  },
+  "homepage": "https://github.com/stayacid/complete-javascript-course#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}
