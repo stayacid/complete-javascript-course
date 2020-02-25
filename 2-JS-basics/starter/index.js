@@ -48,9 +48,9 @@ John's team scored 89, 120 and 103 points, while Mike's team scored 116, 94 and 
 GOOD LUCK 😀
 */
 
-const johnTeamScores = [89, 120, 103];
+const johnTeamScores = [89, 120, 123];
 const mikeTeamScores = [116, 94, 123];
-const maryTeamScores = [97, 134, 105];
+const maryTeamScores = [97, 134, 103];
 
 const getAverage = (arr) => Math.round(arr.reduce((a, b) => a + b) / arr.length);
 
@@ -58,13 +58,56 @@ const johnTeamAverageScore = getAverage(johnTeamScores);
 const mikeTeamAverageScore = getAverage(mikeTeamScores);
 const maryTeamAverageScore = getAverage(maryTeamScores);
 
-switch (true) {
-  case johnTeamAverageScore > mikeTeamAverageScore:
+/*switch (true) {
+  case johnTeamAverageScore > mikeTeamAverageScore && johnTeamAverageScore > maryTeamAverageScore:
     console.log(`John's team win with average score ${johnTeamAverageScore}`);
     break;
-  case mikeTeamAverageScore > johnTeamAverageScore:
+  case mikeTeamAverageScore > johnTeamAverageScore && mikeTeamAverageScore > maryTeamAverageScore:
     console.log(`Mike's team win with average score ${mikeTeamAverageScore}`);
+    break;
+  case maryTeamAverageScore > johnTeamAverageScore && maryTeamAverageScore > mikeTeamAverageScore:
+    console.log(`Mary's team win with average score ${maryTeamAverageScore}`);
     break;
   default:
     console.log("It's a draw!");
+}*/
+
+/*****************************
+* CODING CHALLENGE 3
+*/
+
+/*
+John and his family went on a holiday and went to 3 different restaurants. The bills were $124, $48 and $268.
+
+To tip the waiter a fair amount, John created a simple tip calculator (as a function). He likes to tip 20% of the bill when the bill is less than $50, 15% when the bill is between $50 and $200, and 10% if the bill is more than $200.
+
+In the end, John would like to have 2 arrays:
+1) Containing all three tips (one for each bill)
+2) Containing all three final paid amounts (bill + tip).
+
+(NOTE: To calculate 20% of a value, simply multiply it with 20/100 = 0.2)
+
+GOOD LUCK 😀
+*/
+
+const bills = [124, 48, 268]
+
+const calc = (bills) => {
+  let tips = []
+  bills.forEach(bill => {
+    switch (true) {
+      case bill < 50:
+        tips.push(Math.round(bill * 0.2))
+        break;
+      case bill >= 50 && bill < 200:
+        tips.push(Math.round(bill * 0.15))
+        break;
+      default:
+        tips.push(Math.round(bill * 0.1))
+        break;
+    }
+  });
+  console.log(tips);
 }
+
+calc(bills)
