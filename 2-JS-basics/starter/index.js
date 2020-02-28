@@ -1,8 +1,8 @@
 "use strict";
 
 /** ***************************
-* CODING CHALLENGE 1
-*/
+ * CODING CHALLENGE 1
+ */
 
 /*
 Mark and John are trying to compare their BMI (Body Mass Index), which is calculated using the formula: 
@@ -31,8 +31,8 @@ const compare = markBmi > johnBmi;
 // console.log(`Is Mark's BMI higher than John's? ${compare}`);
 
 /** ***************************
-* CODING CHALLENGE 2
-*/
+ * CODING CHALLENGE 2
+ */
 
 /*
 John and Mike both play basketball in different teams. In the latest 3 games, 
@@ -73,8 +73,8 @@ const maryTeamAverageScore = getAverage(maryTeamScores);
 }*/
 
 /*****************************
-* CODING CHALLENGE 3
-*/
+ * CODING CHALLENGE 3
+ */
 
 /*
 John and his family went on a holiday and went to 3 different restaurants. The bills were $124, $48 and $268.
@@ -120,8 +120,8 @@ const calc = (bills) => {
 //calc(bills)
 
 /*****************************
-* CODING CHALLENGE 4
-*/
+ * CODING CHALLENGE 4
+ */
 
 /*
 Let's remember the first coding challenge where Mark and John compared their BMIs. Let's now implement the same functionality with objects and methods.
@@ -133,7 +133,7 @@ Remember: BMI = mass / height^2 = mass / (height * height). (mass in kg and heig
 
 GOOD LUCK 😀
 */
-const calcBmi = (weight, height) => { 
+const calcBmi = (weight, height) => {
   return Math.round(weight / Math.pow(height, 2));
 };
 
@@ -171,8 +171,8 @@ john.getBmi()
 
 
 /*****************************
-* CODING CHALLENGE 5
-*/
+ * CODING CHALLENGE 5
+ */
 
 /*
 Remember the tip calculator challenge? Let's create a more advanced version using everything we learned!
@@ -197,46 +197,6 @@ Mark likes to tip 20% of the bill when the bill is less than $100, 10% when the 
 
 GOOD LUCK 😀
 */
-
-class Bills {
-  constructor(bills) {
-    this.bills = bills;
-    this.tips = [];
-    this.finalBills = [];
-  }
-
-  calcTip() {
-    for (let i = 0; i < this.bills.length; i++) {
-
-      const el = this.bills[i];
-      let tipSize = 0;
-      //calc tip size
-      switch (true) {
-        case el < 50:
-          tipSize = 0.2
-          break;
-        case el >= 50 && el < 200:
-          tipSize = 0.15
-          break;
-        default:
-          tipSize = 0.1
-          break;
-      }
-      //make tips array
-      const tip = Math.round(this.bills[i] * tipSize)
-      this.tips.push(tip);
-
-      //make final array
-      this.finalBills.push(this.bills[i] + tip)
-    }
-  }
-
-}
-
-let johnb = new Bills([124, 48, 268, 180, 42]);
-johnb.calcTip()
-console.log(johnb);
-
 const johnBills = {
   bills: [124, 48, 268, 180, 42],
   tips: [],
@@ -268,5 +228,61 @@ const johnBills = {
   }
 }
 
-//johnBills.calcTip()
+johnBills.calcTip()
+console.log(johnBills);
 
+const markBills = {
+  bills: [77, 375, 110, 45],
+  tips: [],
+  finalBills: [],
+  calcTip() {
+    for (let i = 0; i < this.bills.length; i++) {
+
+      const el = this.bills[i];
+      let tipSize = 0;
+      //calc tip size
+      switch (true) {
+        case el < 100:
+          tipSize = 0.2
+          break;
+        case el >= 100 && el < 300:
+          tipSize = 0.1
+          break;
+        default:
+          tipSize = 0.25
+          break;
+      }
+      //make tips array
+      const tip = Math.round(this.bills[i] * tipSize)
+      this.tips.push(tip);
+
+      //make final array
+      this.finalBills.push(this.bills[i] + tip)
+    }
+  }
+}
+
+markBills.calcTip()
+console.log(markBills);
+
+let calcAverageTips = (tips) => {
+  let tipsSum = tips.reduce((a, b) => a + b)
+  return tipsSum / tips.length
+}
+
+mark.avegareTips = calcAverageTips(markBills.tips)
+john.averageTips = calcAverageTips(johnBills.tips)
+
+console.log(mark.avegareTips, john.averageTips);
+
+switch (true) {
+  case mark.avegareTips > john.averageTips:
+    console.log(`Mark paid more: ${mark.avegareTips}`);
+    break;
+  case john.averageTips > mark.avegareTips:
+    console.log(`John paid more: ${john.averageTips}`);
+    break;
+  default:
+    console.log(`Guys paid equal on avegare: ${mark.avegareTips}`);
+    break;
+}
