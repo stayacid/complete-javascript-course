@@ -66,29 +66,37 @@ function nextPlayer() {
 document.querySelector('.btn-roll').addEventListener('click', () => {
   if (gamePlaying) {
     for (let i = 0; i < dices.length; i++) {
-      let dice = dices[i];
       // save value to prevDise from 2nd move
-      dice !== 0 ? prevDice[i] = dice : false;
+      dices[i] !== 0 ? prevDices[i] = dices[i] : false;
 
       // 1. get random number
-      dice = Math.floor(Math.random() * 6) + 1; // because math.ceil and math.round can return 0
+      dices[i] = Math.floor(Math.random() * 6) + 1; // because math.ceil and math.round can return 0
       // 2.display the result
+      document.getElementById(`dice-${i}`).src = `dice-${dices[i]}.png`;
       document.getElementById(`dice-${i}`).style.display = 'block';
-      document.getElementById(`dice-${i}`).src = `dice-${dice}.png`;
-      document.getElementById(`dice-${i}`).classList.toggle('roll');
+      setTimeout(() => {
+        document.getElementById(`dice-${i}`).classList.toggle('roll'); // it's for the 1st move
+      }, 1);
       // 3. update the round score if the rolled number was not a 1
-      if (dice !== 1) {
-        roundScore += dice;
+      if (dices[i] !== 1) {
+        roundScore += dices[i];
         document.getElementById(`current-${activePlayer}`).textContent = roundScore;
-        /* if (dice === 6 && prevDice === 6) {
+
+        // check if if got two 6 and skip move if so
+        if (dices[i] === 6 && dices[i - 1] === 6) {
+          console.log('kek');
           scores[activePlayer] = 0;
           document.getElementById(`score-${activePlayer}`).textContent = '0';
           nextPlayer();
-        } */
+        }
       } else {
+        document.getElementById('dice-1').style.display = 'block'; // it's for the 1st move
+        document.getElementById('dice-1').classList.toggle('roll'); // it's for the 1st move
         nextPlayer();
+        break;
       }
     }
+    console.log(prevDices);
   }
 });
 
@@ -115,5 +123,4 @@ document.querySelector('.btn-hold').addEventListener('click', () => {
   }
 });
 
-// fix - if first dice == 1 then second dice score will move to next player
 // add - if both dices == 6, round will be passed to another player
