@@ -58,65 +58,85 @@ c) correct answer (I would use a number for this)
 7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
 */
 
-const questionNode = document.querySelector('h2');
-const answerNode = document.querySelector('ol');
-const formNode = document.querySelector('form');
-const scoreNode = document.querySelector('p span');
-
-const Question = function (question, answers, correntAnswer) {
-  this.question = question;
-  this.answers = answers;
-  this.correntAnswer = correntAnswer;
-
-  this.showAnswers = function () {
-    for (let i = 0; i < answers.length; i++) {
-      console.log(`${i + 1}: ${answers[i]}`);
-    }
+(function() {
+  const questionNode = document.querySelector('h2');
+  const answerNode = document.querySelector('ol');
+  const formNode = document.querySelector('form');
+  const formInput = document.querySelector('form input');
+  const wrongNode = document.querySelector('b');
+  const scoreNode = document.querySelector('p span');
+  
+  let score = 0;
+  let currentQuestion;
+  
+  const Question = function (question, answers, correntAnswer) {
+    this.question = question;
+    this.answers = answers;
+    this.correntAnswer = correntAnswer;
+  
+    this.showAnswers = function () {
+      // create new list
+      const fragment = new DocumentFragment();
+      for (let i = 0; i < currentQuestion.answers.length; i++) {
+        const li = document.createElement('li');
+        li.textContent = currentQuestion.answers[i];
+        fragment.append(li);
+      }
+      answerNode.append(fragment);
+    };
   };
-};
-
-const firstQuestion = new Question('2 + 2 = ?', [4, 6, 'too much'], 1);
-const secondQuestion = new Question('6 * 6 = ?', [66, 18, 36], 3);
-const thirdQuestion = new Question('Which year is it now ?', [2019, 2020, 2021], 2);
-
-const questions = [firstQuestion, secondQuestion, thirdQuestion];
-
-let currentQuestion;
-
-function askQuestion() {
-  // get random answer
-  const currentQuestionNumber = Math.floor(Math.random() * questions.length);
-  // save this question
-  currentQuestion = questions.slice(currentQuestionNumber, currentQuestionNumber + 1)[0];
-  console.log(currentQuestion);
-  // cut question from array
-  questions.splice(currentQuestionNumber, 1);
-  // put text in question
-  questionNode.textContent = currentQuestion.question;
-  // delete previous list
-  while (answerNode.firstChild) {
-    answerNode.removeChild(answerNode.firstChild);
+  
+  const firstQuestion = new Question('2 + 2 = ?', [4, 6, 'too much'], 1);
+  const secondQuestion = new Question('6 * 6 = ?', [66, 18, 36], 3);
+  const thirdQuestion = new Question('Which year is it now ?', [2019, 2020, 2021], 2);
+  
+  const questions = [firstQuestion, secondQuestion, thirdQuestion];
+  
+  // ask question
+  function askQuestion() {
+    if (questions.length > 0) {
+      // get random answer
+      const currentQuestionNumber = Math.floor(Math.random() * questions.length);
+      // save this question
+      currentQuestion = questions.slice(currentQuestionNumber, currentQuestionNumber + 1)[0];
+      console.log(currentQuestion);
+      // cut question from array
+      questions.splice(currentQuestionNumber, 1);
+      // put text in question
+      questionNode.textContent = currentQuestion.question;
+      // delete previous list
+      while (answerNode.firstChild) {
+        answerNode.removeChild(answerNode.firstChild);
+      }
+      // call a method to create new list
+      currentQuestion.showAnswers()
+    }
+     else {
+      wrongNode.textContent = "The end!"
+      const nodesToHide = [questionNode, answerNode, formNode ]
+      for (let i = 0; i < nodesToHide.length; i++) {
+        nodesToHide[i].style.display = 'none'
+      }
+  
+     }
+  
   }
-  // create new list
-  const fragment = new DocumentFragment();
-  for (let i = 0; i < currentQuestion.answers.length; i++) {
-    const li = document.createElement('li');
-    li.textContent = currentQuestion.answers[i];
-    fragment.append(li);
-  }
-  answerNode.append(fragment);
-}
+  
+  // get answer
+  formNode.addEventListener('submit', function (e) {
+    e.preventDefault();
+    console.log(formInput.value == currentQuestion.correntAnswer);
+    if (formInput.value != currentQuestion.correntAnswer) {
+      wrongNode.textContent = 'Wrong!'
+      askQuestion()
+    } else {
+      wrongNode.textContent = ''
+      score += 1;
+      scoreNode.textContent = score;
+      askQuestion()
+    }
+  })
+  
+  askQuestion();
 
-askQuestion();
-
-
-
-/* 
-  1. Берем случайный вопрос (сделано)
-  2. Вырезаем его из массива
-  3. Задаем вопрос
-  4. Проверяем
-  5. Прибавляем к счету
-  6. Задаем следующий вопрос
-  7. Показываем финальный результат
-*/
+})();
