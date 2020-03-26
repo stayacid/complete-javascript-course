@@ -17,16 +17,16 @@ const budgetController = (function () {
     this.value = value;
     this.percentage = null;
   };
-  Expense.prototype.calcPercentage = function(totalIncome) {
+  Expense.prototype.calcPercentage = function (totalIncome) {
     if (totalIncome > 0) {
       this.percentage = ((this.value / totalIncome) * 100).toFixed(1);
     } else {
       this.percentage = null;
     }
   };
-  Expense.prototype.getPercentage = function() {
+  Expense.prototype.getPercentage = function () {
     return this.percentage;
-  }
+  };
   const Income = function (id, description, value) {
     this.id = id;
     this.description = description;
@@ -80,7 +80,7 @@ const budgetController = (function () {
 
       // calculate the percentage of income that we spent
       if (data.totals.inc > 0) {
-        data.percentage = (data.totals.exp / data.totals.inc * 100).toFixed(1);
+        data.percentage = ((data.totals.exp / data.totals.inc) * 100).toFixed(1);
       } else {
         data.percentage = -1;
       }
@@ -207,9 +207,18 @@ const UIController = (function () {
     },
     displayMonth() {
       const now = new Date();
+      const month = now.getMonth();
       const year = now.getFullYear();
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-      document.querySelector(DOMstrings.dateLabel).textContent = year;
+      document.querySelector(DOMstrings.dateLabel).textContent = `${months[month]} ${year}`;
+    },
+    changeType() {
+      const fields = document.querySelectorAll(`${DOMstrings.inputType},${DOMstrings.inputDescription},${DOMstrings.inputValue}`);
+      fields.forEach((el) => {
+        el.classList.toggle('red-focus');
+      });
+      document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
     },
   };
 }());
@@ -231,7 +240,7 @@ const controller = (function (budgetCtrl, UICtrl) {
     // 1. Calculate percentages
     budgetCtrl.calculatePercentages();
     // 2. read percentages from the budget controller
-    let percentages = budgetCtrl.getPercentages();
+    const percentages = budgetCtrl.getPercentages();
     // 3. Update the UI with the new pecrcentages
     UICtrl.displayPercentages(percentages);
   };
@@ -280,6 +289,8 @@ const controller = (function (budgetCtrl, UICtrl) {
     });
 
     document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeType);
   };
 
   return {
