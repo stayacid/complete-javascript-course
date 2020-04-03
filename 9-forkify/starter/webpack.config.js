@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const copyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'src'), // __dirname is absolute path to this folder
@@ -41,9 +43,18 @@ module.exports = {
           },
         ],
       },
+      // IMG
+      {
+        test: /\.(png|jpg|gif|svg|webp)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        },
+      },
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './src/index.html',
@@ -52,6 +63,10 @@ module.exports = {
       path: PATHS.dist,
       filename: 'css/[name].[contenthash].css',
     }),
+    new copyWebpackPlugin([{
+      from: `${PATHS.src}/img`,
+      to: `${PATHS.dist}/img`,
+    }]),
   ],
 };
 
