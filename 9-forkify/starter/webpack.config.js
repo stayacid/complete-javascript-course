@@ -8,24 +8,14 @@ const PATHS = {
 };
 
 module.exports = {
-  entry: './src/js',
+  entry: `${PATHS.src}/js`,
   output: {
-    // filename: `${PATHS.dist}js/[name].[contenthash].js`,
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js',
+    path: PATHS.dist,
+    filename: 'js/[name].[contenthash].js',
   },
   devServer: {
     contentBase: './dist',
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: './src/index.html',
-    }),
-    /*new MiniCssExtractPlugin({
-      filename: `${PATHS.assets}css/[name].[contenthash].css`
-    }),*/
-  ],
   module: {
     rules: [
       // js
@@ -37,7 +27,7 @@ module.exports = {
         },
       },
       // CSS
-      /*{
+      {
         test: /\.css$/,
         use: [
           'style-loader',
@@ -50,9 +40,19 @@ module.exports = {
             },
           },
         ],
-      },*/
+      },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './src/index.html',
+    }),
+    new MiniCssExtractPlugin({
+      path: PATHS.dist,
+      filename: 'css/[name].[contenthash].css',
+    }),
+  ],
 };
 
 /*
