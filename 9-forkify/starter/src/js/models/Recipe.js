@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {
-  url
-} from '../config';
+import { url } from '../config';
 
 export default class Recipe {
   constructor(id) {
@@ -89,7 +87,7 @@ export default class Recipe {
             count = 0.72;
           }
         } else if (arrCount.length === 2) { // This is in case we have something like "2 1/4 teaspoons active dry yeast"
-          // count = eval(arrIng.slice(0, unitIndex).join("+")); 
+          // count = eval(arrIng.slice(0, unitIndex).join("+"));
 
           // EVAL ALTERNATIVE:
           const firstNum = parseInt(arrIng[0], 10); // 2
@@ -124,5 +122,17 @@ export default class Recipe {
       return objIng;
     });
     this.ingredients = newIngredients;
+  }
+
+  updateServings(type) {
+    // Servings
+    const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+    // Ingredients
+    this.ingredients.forEach((ing) => {
+      const i = ing;
+      i.count *= (newServings / this.servings);
+    });
+
+    this.servings = newServings;
   }
 }

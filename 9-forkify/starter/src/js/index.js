@@ -3,6 +3,7 @@ import '../css/style.css';
 import { elements, renderLoader, clearLoader } from './views/base';
 import Search from './models/Search';
 import Recipe from './models/Recipe';
+import List from './models/List';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 
@@ -12,9 +13,7 @@ import * as recipeView from './views/recipeView';
 * - Shopping list object
 * - Liked pecipes
 */
-const state = {
-
-};
+const state = {};
 
 // SEARCH CONTROLLER
 const controlSearch = async () => {
@@ -60,12 +59,15 @@ elements.searchResPages.addEventListener('click', (e) => {
 // RECIPE CONTROLLER
 const controlRecipe = async () => {
   // Get ID from url
-  const id = window.location.hash.replace('#', ' ');
+  const id = window.location.hash.replace('#', '');
 
   if (id) {
     // Prepare UI for changes
     recipeView.clearRecipe();
     renderLoader(elements.recipe);
+
+    // Highlight selected seacrh item
+    if (state.search) searchView.highlightSelected(id);
 
     // Create new recipe object
     state.recipe = new Recipe(id);
@@ -89,3 +91,20 @@ const controlRecipe = async () => {
 };
 
 ['hashchange', 'load'].forEach((event) => window.addEventListener(event, controlRecipe));
+
+// Handling recipe buttons clicks
+elements.recipe.addEventListener('click', (e) => {
+  if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+    // Decrease button is clicked
+    if (state.recipe.servings > 1) {
+      state.recipe.updateServings('dec');
+      recipeView.updateServingsIngredients(state.recipe);
+    }
+  } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+    // Decrease button is clicked
+    state.recipe.updateServings('inc');
+    recipeView.updateServingsIngredients(state.recipe);
+  }
+});
+
+window.l = new List();
